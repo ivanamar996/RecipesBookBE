@@ -19,5 +19,13 @@ namespace RecepiesBook.Data
         public DbSet<IngAmount> IngAmounts { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Ingredient>()
+                .HasMany(i => i.IngAmounts)
+                .WithOne(x=>x.Ingredient)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

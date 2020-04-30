@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecepiesBook.Data;
 
 namespace RecepiesBook.Migrations
 {
     [DbContext(typeof(RecepiesBookDbContext))]
-    partial class RecepiesBookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200430090735_migration")]
+    partial class migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,7 +141,8 @@ namespace RecepiesBook.Migrations
 
                     b.HasOne("RecepiesBook.Models.Recepie", null)
                         .WithMany("IngAmounts")
-                        .HasForeignKey("RecepieId");
+                        .HasForeignKey("RecepieId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RecepiesBook.Models.ShoppingList", null)
                         .WithMany("IngAmounts")

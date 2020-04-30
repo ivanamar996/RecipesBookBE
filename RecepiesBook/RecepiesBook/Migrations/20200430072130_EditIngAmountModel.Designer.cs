@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecepiesBook.Data;
 
 namespace RecepiesBook.Migrations
 {
     [DbContext(typeof(RecepiesBookDbContext))]
-    partial class RecepiesBookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200430072130_EditIngAmountModel")]
+    partial class EditIngAmountModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,7 +133,7 @@ namespace RecepiesBook.Migrations
 
             modelBuilder.Entity("RecepiesBook.Models.IngAmount", b =>
                 {
-                    b.HasOne("RecepiesBook.Models.Ingredient", "Ingredient")
+                    b.HasOne("RecepiesBook.Models.Ingredient", null)
                         .WithMany("IngAmounts")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)

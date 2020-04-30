@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RecepiesBook.Data;
+using RecepiesBook.Services;
 
 namespace RecepiesBook
 {
@@ -28,8 +29,15 @@ namespace RecepiesBook
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddDbContext<RecepiesBookDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RecepiesBookConnection")));
+
+            services.AddTransient<IngAmountService>();
+            services.AddTransient<RecepieService>();
+            services.AddTransient<IngredientService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

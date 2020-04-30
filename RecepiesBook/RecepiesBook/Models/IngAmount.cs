@@ -13,8 +13,10 @@ namespace RecepiesBook.Models
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be number.")]
         public int Amount { get; set; }
         [Required]
-        public int RecepieId { get; set; }
+        public int IngredientId { get; set; }
+        public Ingredient Ingredient { get; set; }
+        public int? RecepieId { get; set; }
         public int? ShoppingListId { get; set; }
-        public int? IngredientId { get; set; }
+
     }
 }
