@@ -35,9 +35,9 @@ namespace RecepiesBook
 
             services.AddDbContext<RecepiesBookDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RecepiesBookConnection")));
 
-            services.AddTransient<IngAmountService>();
+
             services.AddTransient<RecepieService>();
-            services.AddTransient<IngredientService>();
+            services.AddTransient<ShoppingListService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

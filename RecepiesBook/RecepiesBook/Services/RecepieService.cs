@@ -34,21 +34,52 @@ namespace RecepiesBook.Services
                                     .FirstOrDefault();
 
             return recepie;
-
         }
 
         public void CreateNewRecepie(Recepie newRecepie)
         {
+
+            foreach (var ing in newRecepie.IngAmounts)
+            {
+                var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Id == ing.IngredientId);
+
+                if (ingredient == null)
+                {
+                    ingredient = _dbContext.Ingredients.Add(ing.Ingredient).Entity;
+                }
+
+                ing.Ingredient = ingredient;
+
+                _dbContext.IngAmounts.Add(ing);
+
+            }
+
             _dbContext.Recepies.Add(newRecepie);
             _dbContext.SaveChanges();
         }
 
         public bool UpdateRecepie(int id, Recepie changedRecepie)
         {
-            var currentRecepie = _dbContext.Recepies.Where(x => x.Id == id).FirstOrDefault();
+            var currentRecepie = _dbContext.Recepies.SingleOrDefault(x => x.Id == id);
 
             if (currentRecepie == null)
                 return false;
+
+            foreach (var ing in changedRecepie.IngAmounts)
+            {
+                if (ing.IngredientId == null)
+                {
+                    _dbContext.Ingredients.Add(ing.Ingredient);
+                    _dbContext.IngAmounts.Add(ing);
+                }
+                else 
+                {
+                    var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x=>x.Id == ing.Id);
+
+                    ingAmount.Amount = ing.Amount;
+                    ingAmount.Ingredient = ing.Ingredient;
+                }
+            }
 
             currentRecepie.Name = changedRecepie.Name;
             currentRecepie.ImagePath = changedRecepie.ImagePath;
@@ -61,7 +92,7 @@ namespace RecepiesBook.Services
 
         public bool DeleteRecepie(int id)
         {
-            var recepie = _dbContext.Recepies.Where(x => x.Id == id).FirstOrDefault();
+            var recepie = _dbContext.Recepies.SingleOrDefault(x => x.Id == id);
 
             if (recepie == null)
                 return false;
@@ -76,6 +107,7 @@ namespace RecepiesBook.Services
             }
 
             _dbContext.SaveChanges();
+
             return true;
         }
     }

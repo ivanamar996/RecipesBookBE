@@ -38,19 +38,52 @@ namespace RecepiesBook.Services
 
         public void CreateNewShoppingList(ShoppingList newShoppingList)
         {
+
+            foreach (var ing in newShoppingList.IngAmounts)
+            {
+                var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Id == ing.IngredientId);
+
+                if(ingredient == null)
+                {
+                    ingredient =  _dbContext.Ingredients.Add(ing.Ingredient).Entity;
+                }
+
+                ing.Ingredient = ingredient;
+
+                _dbContext.IngAmounts.Add(ing);
+  
+            }
+
             _dbContext.ShoppingLists.Add(newShoppingList);
+
             _dbContext.SaveChanges();
         }
 
-        public bool UpdateShoppingList(int id, ShoppingList changedRecepie)
+        public bool UpdateShoppingList(int id, ShoppingList changedShoppingList)
         {
             var currentShoppingList = _dbContext.ShoppingLists.Where(x => x.Id == id).FirstOrDefault();
 
             if (currentShoppingList == null)
                 return false;
 
-            currentShoppingList.Name = changedRecepie.Name;
-            currentShoppingList.Description = changedRecepie.Description;
+            foreach (var ing in changedShoppingList.IngAmounts)
+            {
+                if (ing.IngredientId == null)
+                {
+                    _dbContext.Ingredients.Add(ing.Ingredient);
+                    _dbContext.IngAmounts.Add(ing);
+                }
+                else
+                {
+                    var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x => x.Id == ing.Id);
+
+                    ingAmount.Amount = ing.Amount;
+                    ingAmount.Ingredient = ing.Ingredient;
+                }
+            }
+
+            currentShoppingList.Name = changedShoppingList.Name;
+            currentShoppingList.Description = changedShoppingList.Description;
 
             _dbContext.SaveChanges();
 
