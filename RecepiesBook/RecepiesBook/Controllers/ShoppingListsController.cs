@@ -27,7 +27,7 @@ namespace RecepiesBook.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Recepie> GetRecepieById(int id)
+        public ActionResult<Recepie> GetShoppingListById(int id)
         {
             var sl = _shoppingListService.GetShoppingListById(id);
 

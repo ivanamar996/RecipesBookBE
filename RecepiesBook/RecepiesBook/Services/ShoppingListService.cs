@@ -104,6 +104,11 @@ namespace RecepiesBook.Services
             foreach (var ing in ingAmounts)
             {
                 ing.ShoppingListId = null;
+
+                if (ing.RecepieId == null)
+                {
+                    _dbContext.IngAmounts.Remove(ing);
+                }
             }
 
             _dbContext.SaveChanges();
