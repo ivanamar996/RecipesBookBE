@@ -4,6 +4,7 @@ using RecepiesBook.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace RecepiesBook.Services
@@ -87,6 +88,25 @@ namespace RecepiesBook.Services
 
             _dbContext.SaveChanges();
 
+            return true;
+        }
+
+        public bool AddIngredientsFromRecepieToSl(int id, int recepieId)
+        {
+            var currentShoppingList = _dbContext.ShoppingLists.SingleOrDefault(x => x.Id == id);
+
+            var recepie = _dbContext.Recepies.Include(x=>x.IngAmounts)
+                                            .SingleOrDefault(x => x.Id == recepieId);
+
+            if (currentShoppingList == null || recepie == null)
+                return false;
+
+            foreach (var ing in recepie.IngAmounts)
+            {
+                ing.ShoppingListId = id;
+            }
+
+            _dbContext.SaveChanges();
             return true;
         }
 

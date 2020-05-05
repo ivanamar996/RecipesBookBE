@@ -64,6 +64,20 @@ namespace RecepiesBook.Controllers
                 return NotFound();
         }
 
+        [HttpPut("addIngredientsToShoppingList/{id}/recepie/{recepieId}")]
+        public ActionResult AddIngredientsFromRecepieToSl(int id, int recepieId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            bool success = _shoppingListService.AddIngredientsFromRecepieToSl(id, recepieId);
+
+            if (success)
+                return NoContent();
+            else
+                return NotFound();
+        }
+
 
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)

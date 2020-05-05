@@ -35,6 +35,7 @@ namespace RecepiesBook.Controllers
                     new Claim(JwtRegisteredClaimNames.Sub, userInDb.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
+
                 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySuperSecureKey"));
 
                 var token = new JwtSecurityToken(
