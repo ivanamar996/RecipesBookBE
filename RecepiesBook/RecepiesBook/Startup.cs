@@ -76,8 +76,6 @@ namespace RecepiesBook
                 app.UseDeveloperExceptionPage();
             }
 
-            //SeedDatabase.Initialize(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
-
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
