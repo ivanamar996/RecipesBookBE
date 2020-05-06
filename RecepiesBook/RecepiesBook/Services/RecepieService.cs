@@ -113,17 +113,7 @@ namespace RecepiesBook.Services
             _dbContext.Recepies.Remove(recepie);
 
             var ingAmounts = _dbContext.IngAmounts.Where(x => x.RecepieId == id);
-
-            foreach(var ing in ingAmounts)
-            {
-                ing.RecepieId = null;
-
-                if(ing.ShoppingListId == null)
-                {
-                    _dbContext.IngAmounts.Remove(ing);
-                }
-            }
-
+            _dbContext.IngAmounts.RemoveRange(ingAmounts);
             _dbContext.SaveChanges();
 
             return true;

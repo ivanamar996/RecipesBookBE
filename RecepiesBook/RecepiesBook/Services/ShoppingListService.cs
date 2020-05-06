@@ -113,7 +113,11 @@ namespace RecepiesBook.Services
 
             foreach (var ing in recepie.IngAmounts)
             {
-                ing.ShoppingListId = id;
+                var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x => x.ShoppingListId == id && x.IngredientId==ing.IngredientId);
+                if (ingAmount != null)
+                    ingAmount.Amount += ing.Amount;
+                else
+                    _dbContext.IngAmounts.Add(new IngAmount() { Amount = ing.Amount, IngredientId=ing.IngredientId, ShoppingListId=id});
             }
 
             _dbContext.SaveChanges();
@@ -130,18 +134,9 @@ namespace RecepiesBook.Services
             _dbContext.ShoppingLists.Remove(shoppingList);
 
             var ingAmounts = _dbContext.IngAmounts.Where(x => x.ShoppingListId == id);
-
-            foreach (var ing in ingAmounts)
-            {
-                ing.ShoppingListId = null;
-
-                if (ing.RecepieId == null)
-                {
-                    _dbContext.IngAmounts.Remove(ing);
-                }
-            }
-
+            _dbContext.IngAmounts.RemoveRange(ingAmounts);
             _dbContext.SaveChanges();
+
             return true;
         }
     }
