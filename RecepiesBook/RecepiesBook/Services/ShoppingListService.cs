@@ -67,6 +67,9 @@ namespace RecepiesBook.Services
             if (currentShoppingList == null)
                 return false;
 
+            var deletedIngAmounts = currentShoppingList.IngAmounts.Except(currentShoppingList.IngAmounts);
+            _dbContext.IngAmounts.RemoveRange(deletedIngAmounts);
+
             foreach (var ing in changedShoppingList.IngAmounts)
             {
                 if (ing.IngredientId == null)
@@ -78,9 +81,16 @@ namespace RecepiesBook.Services
                 {
                     var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x => x.Id == ing.Id);
 
-                    ingAmount.Amount = ing.Amount;
-                    ingAmount.Ingredient = ing.Ingredient;
-                }
+                    if (ingAmount != null)
+                    {
+                        ingAmount.Amount = ing.Amount;
+                        ingAmount.Ingredient = ing.Ingredient;
+                    }
+                    else
+                    {
+                        _dbContext.IngAmounts.Add(ing);
+                    }
+                }   
             }
 
             currentShoppingList.Name = changedShoppingList.Name;

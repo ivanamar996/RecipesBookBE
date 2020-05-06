@@ -60,10 +60,15 @@ namespace RecepiesBook.Services
 
         public bool UpdateRecepie(int id, Recepie changedRecepie)
         {
-            var currentRecepie = _dbContext.Recepies.SingleOrDefault(x => x.Id == id);
+            var currentRecepie = _dbContext.Recepies.Include(x=>x.IngAmounts).SingleOrDefault(x => x.Id == id);
 
             if (currentRecepie == null)
                 return false;
+
+
+            var deletedIngAmounts = currentRecepie.IngAmounts.Except(changedRecepie.IngAmounts);
+            _dbContext.IngAmounts.RemoveRange(deletedIngAmounts);
+
 
             foreach (var ing in changedRecepie.IngAmounts)
             {
@@ -76,10 +81,18 @@ namespace RecepiesBook.Services
                 {
                     var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x=>x.Id == ing.Id);
 
-                    ingAmount.Amount = ing.Amount;
-                    ingAmount.Ingredient = ing.Ingredient;
+                    if (ingAmount != null)
+                    {
+                        ingAmount.Amount = ing.Amount;
+                        ingAmount.Ingredient = ing.Ingredient;
+                    }
+                    else
+                    {
+                        _dbContext.IngAmounts.Add(ing);
+                    }
                 }
             }
+
 
             currentRecepie.Name = changedRecepie.Name;
             currentRecepie.ImagePath = changedRecepie.ImagePath;
