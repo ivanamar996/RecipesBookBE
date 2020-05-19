@@ -10,26 +10,26 @@ using RecepiesBook.Services;
 
 namespace RecepiesBook.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ShoppingListsController : ControllerBase
     {
-        private readonly ShoppingListService _shoppingListService;
+        private readonly IShoppingListService _shoppingListService;
 
-        public ShoppingListsController(ShoppingListService shoppingListService)
+        public ShoppingListsController(IShoppingListService shoppingListService)
         {
             _shoppingListService = shoppingListService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ShoppingList>> Get()
+        public IActionResult Get()
         {
             return Ok(_shoppingListService.GetAllSoppingLists());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Recepie> GetShoppingListById(int id)
+        public IActionResult GetShoppingListById(int id)
         {
             var sl = _shoppingListService.GetShoppingListById(id);
 
@@ -40,7 +40,7 @@ namespace RecepiesBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ShoppingList newShoppingList)
+        public IActionResult Post([FromBody] ShoppingList newShoppingList)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -51,7 +51,7 @@ namespace RecepiesBook.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(int id, [FromBody] ShoppingList changedShoppingList)
+        public IActionResult Update(int id, [FromBody] ShoppingList changedShoppingList)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -65,7 +65,7 @@ namespace RecepiesBook.Controllers
         }
 
         [HttpPut("addIngredientsToShoppingList/{id}/recepie/{recepieId}")]
-        public ActionResult AddIngredientsFromRecepieToSl(int id, int recepieId)
+        public IActionResult AddIngredientsFromRecepieToSl(int id, int recepieId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -80,7 +80,7 @@ namespace RecepiesBook.Controllers
 
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             bool success = _shoppingListService.DeleteShoppingList(id);
 

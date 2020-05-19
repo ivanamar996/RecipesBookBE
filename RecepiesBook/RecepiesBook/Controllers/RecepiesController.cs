@@ -15,21 +15,21 @@ namespace RecepiesBook.Controllers
     [ApiController]
     public class RecepiesController : ControllerBase
     {
-        private readonly RecepieService _recepieService;
+        private readonly IRecepieService _recepieService;
 
-        public RecepiesController(RecepieService recepieService)
+        public RecepiesController(IRecepieService recepieService)
         {
             _recepieService = recepieService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Recepie>> Get()
+        public IActionResult Get()
         {
             return Ok(_recepieService.GetAllRecepies());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Recepie> GetRecepieById(int id)
+        public IActionResult GetRecepieById(int id)
         {
             var recepie = _recepieService.GetRecepieById(id);
 
@@ -40,7 +40,7 @@ namespace RecepiesBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] Recepie newRecepie)
+        public IActionResult Post([FromBody] Recepie newRecepie)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -51,7 +51,7 @@ namespace RecepiesBook.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(int id, [FromBody] Recepie changedRecepie)
+        public IActionResult Update(int id, [FromBody] Recepie changedRecepie)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -66,7 +66,7 @@ namespace RecepiesBook.Controllers
 
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             bool success = _recepieService.DeleteRecepie(id);
 
