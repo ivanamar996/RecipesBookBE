@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using RecepiesBook.Controllers;
+using RecipesBook.Controllers;
 using RecipesBook.Models;
 using RecipesBook.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using RecipesBook.Controllers;
 
 namespace RecipesBook.Tests
 {
