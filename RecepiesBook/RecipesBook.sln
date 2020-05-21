@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecepiesBook", "RecepiesBook\RecepiesBook.csproj", "{423CF254-25E1-4106-A6F5-731FA1DD45CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipesBook", "RecepiesBook\RecipesBook.csproj", "{423CF254-25E1-4106-A6F5-731FA1DD45CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecepiesBook.Tests", "RecepiesBook.Tests\RecepiesBook.Tests.csproj", "{31C88B83-40CA-4D67-880F-4950BEA29C76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipesBook.Tests", "RecepiesBook.Tests\RecipesBook.Tests.csproj", "{31C88B83-40CA-4D67-880F-4950BEA29C76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,45 +1,42 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RecepiesBook.Data;
-using RecepiesBook.Models;
+using RecipesBook.Data;
+using RecipesBook.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
-namespace RecepiesBook.Services
+namespace RecipesBook.Services
 {
-    public class RecepieService : IRecepieService
+    public class RecipeService : IRecipeService
     {
-        private readonly RecepiesBookDbContext _dbContext;
+        private readonly RecipesBookDbContext _dbContext;
 
-        public RecepieService(RecepiesBookDbContext dbContext)
+        public RecipeService(RecipesBookDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Recepie> GetAllRecepies()
+        public IEnumerable<Recipe> GetAllRecipes()
         {
-            return _dbContext.Recepies
+            return _dbContext.Recipes
                     .Include(x => x.IngAmounts)
                         .ThenInclude(x => x.Ingredient);
         }
 
-        public Recepie GetRecepieById(int id)
+        public Recipe GetRecipeById(int id)
         {
-            var recepie = _dbContext.Recepies
-                                    .Include(x => x.IngAmounts)
-                                    .ThenInclude(x => x.Ingredient)
-                                    .Where(recepie => recepie.Id == id)
-                                    .FirstOrDefault();
+            var recipe = _dbContext.Recipes
+                .Include(x => x.IngAmounts)
+                .ThenInclude(x => x.Ingredient)
+                .FirstOrDefault(recipe => recipe.Id == id);
 
-            return recepie;
+            return recipe;
         }
 
-        public void CreateNewRecepie(Recepie newRecepie)
+        public void CreateNewRecipe(Recipe newRecipe)
         {
 
-            foreach (var ing in newRecepie.IngAmounts)
+            foreach (var ing in newRecipe.IngAmounts)
             {
                 var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.Equals(ing.Ingredient.Name));
 
@@ -54,18 +51,18 @@ namespace RecepiesBook.Services
 
             }
 
-            _dbContext.Recepies.Add(newRecepie);
+            _dbContext.Recipes.Add(newRecipe);
             _dbContext.SaveChanges();
         }
 
-        public bool UpdateRecepie(int id, Recepie changedRecepie)
+        public bool UpdateRecipe(int id, Recipe changedRecipe)
         {
-            var currentRecepie = _dbContext.Recepies.Include(x => x.IngAmounts).SingleOrDefault(x => x.Id == id);
+            var currentRecipe = _dbContext.Recipes.Include(x => x.IngAmounts).SingleOrDefault(x => x.Id == id);
 
-            if (currentRecepie == null)
+            if (currentRecipe == null)
                 return false;
 
-            foreach (var ing in changedRecepie.IngAmounts)
+            foreach (var ing in changedRecipe.IngAmounts)
             {
                 if (ing.IngredientId == null)
                 {
@@ -100,29 +97,29 @@ namespace RecepiesBook.Services
                 }
             }
 
-            var deletedIngAmounts = currentRecepie.IngAmounts.Where(i => !changedRecepie.IngAmounts.Any(x => x.Id == i.Id));
+            var deletedIngAmounts = currentRecipe.IngAmounts.Where(i => !changedRecipe.IngAmounts.Any(x => x.Id == i.Id));
             _dbContext.IngAmounts.RemoveRange(deletedIngAmounts);
 
 
-            currentRecepie.Name = changedRecepie.Name;
-            currentRecepie.ImagePath = changedRecepie.ImagePath;
-            currentRecepie.Description = changedRecepie.Description;
+            currentRecipe.Name = changedRecipe.Name;
+            currentRecipe.ImagePath = changedRecipe.ImagePath;
+            currentRecipe.Description = changedRecipe.Description;
 
             _dbContext.SaveChanges();
 
             return true;
         }
 
-        public bool DeleteRecepie(int id)
+        public bool DeleteRecipe(int id)
         {
-            var recepie = _dbContext.Recepies.SingleOrDefault(x => x.Id == id);
+            var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Id == id);
 
-            if (recepie == null)
+            if (recipe == null)
                 return false;
 
-            _dbContext.Recepies.Remove(recepie);
+            _dbContext.Recipes.Remove(recipe);
 
-            var ingAmounts = _dbContext.IngAmounts.Where(x => x.RecepieId == id);
+            var ingAmounts = _dbContext.IngAmounts.Where(x => x.RecipeId == id);
             _dbContext.IngAmounts.RemoveRange(ingAmounts);
             _dbContext.SaveChanges();
 

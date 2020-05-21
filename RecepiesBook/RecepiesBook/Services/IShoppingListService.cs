@@ -1,11 +1,11 @@
-﻿using RecepiesBook.Models;
+﻿using RecipesBook.Models;
 using System.Collections.Generic;
 
-namespace RecepiesBook.Services
+namespace RecipesBook.Services
 {
     public interface IShoppingListService
     {
-        bool AddIngredientsFromRecepieToSl(int id, int recepieId);
+        bool AddIngredientsFromRecipeToSl(int id, int recipeId);
         void CreateNewShoppingList(ShoppingList newShoppingList);
         bool DeleteShoppingList(int id);
         IEnumerable<ShoppingList> GetAllSoppingLists();

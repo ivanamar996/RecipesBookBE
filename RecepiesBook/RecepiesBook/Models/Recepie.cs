@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecepiesBook.Models
+namespace RecipesBook.Models
 {
-    public class Recepie
+    public class Recipe
     {
         public int Id { get; set; }
         [Required]

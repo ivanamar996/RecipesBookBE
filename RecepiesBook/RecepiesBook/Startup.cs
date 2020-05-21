@@ -15,11 +15,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using RecepiesBook.Data;
-using RecepiesBook.Models;
-using RecepiesBook.Services;
+using RecipesBook.Data;
+using RecipesBook.Models;
+using RecipesBook.Services;
 
-namespace RecepiesBook
+namespace RecipesBook
 {
     public class Startup
     {
@@ -52,10 +52,10 @@ namespace RecepiesBook
             });
 
 
-            services.AddDbContext<RecepiesBookDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RecepiesBookConnection")));
+            services.AddDbContext<RecipesBookDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RecipesBookConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<RecepiesBookDbContext>()
+                .AddEntityFrameworkStores<RecipesBookDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddAuthentication(options =>
@@ -78,8 +78,8 @@ namespace RecepiesBook
                 };
             });
 
-            services.AddTransient<RecepieService>();
-            services.AddTransient<ShoppingListService>();
+            services.AddTransient<IRecipeService,RecipeService>();
+            services.AddTransient<IShoppingListService,ShoppingListService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

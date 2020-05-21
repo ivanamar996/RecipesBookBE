@@ -1,14 +1,14 @@
-﻿using RecepiesBook.Models;
+﻿using RecipesBook.Models;
 using System.Collections.Generic;
 
-namespace RecepiesBook.Services
+namespace RecipesBook.Services
 {
-    public interface IRecepieService
+    public interface IRecipeService
     {
-        void CreateNewRecepie(Recepie newRecepie);
-        bool DeleteRecepie(int id);
-        IEnumerable<Recepie> GetAllRecepies();
-        Recepie GetRecepieById(int id);
-        bool UpdateRecepie(int id, Recepie changedRecepie);
+        void CreateNewRecipe(Recipe newRecipe);
+        bool DeleteRecipe(int id);
+        IEnumerable<Recipe> GetAllRecipes();
+        Recipe GetRecipeById(int id);
+        bool UpdateRecipe(int id, Recipe changedRecipe);
     }
 }

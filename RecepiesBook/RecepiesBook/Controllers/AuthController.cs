@@ -8,27 +8,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using RecepiesBook.Models;
+using RecipesBook.Models;
 
-namespace RecepiesBook.Controllers
+namespace RecipesBook.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private UserManager<ApplicationUser> userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AuthController(UserManager<ApplicationUser> userManager)
         {
-            this.userManager = userManager;
+            this._userManager = userManager;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] User user) 
         {
-            var userInDb = await userManager.FindByEmailAsync(user.Email);
+            var userInDb = await _userManager.FindByEmailAsync(user.Email);
 
-            if (userInDb != null && await userManager.CheckPasswordAsync(userInDb, user.Password))
+            if (userInDb != null && await _userManager.CheckPasswordAsync(userInDb, user.Password))
             {
                 var claims = new[]
                 {
@@ -59,7 +59,7 @@ namespace RecepiesBook.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> SignUp([FromBody] User user)
         {
-            var userInDb = await userManager.FindByEmailAsync(user.Email);
+            var userInDb = await _userManager.FindByEmailAsync(user.Email);
 
             if (userInDb == null )
             {
@@ -72,7 +72,7 @@ namespace RecepiesBook.Controllers
                         SecurityStamp = Guid.NewGuid().ToString(),
                     };
 
-                    IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
+                    IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
 
                     if (result.Succeeded)
                     {
@@ -100,7 +100,7 @@ namespace RecepiesBook.Controllers
                     }
                     else
                     {
-                        return BadRequest("Error occuried while creating a new user!");
+                        return BadRequest("Error occured while creating a new user!");
                     }
                 }
                 else 

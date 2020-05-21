@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RecepiesBook.Data;
-using RecepiesBook.Models;
+using RecipesBook.Data;
+using RecipesBook.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
-namespace RecepiesBook.Services
+namespace RecipesBook.Services
 {
     public class ShoppingListService : IShoppingListService
     {
-        private readonly RecepiesBookDbContext _dbContext;
+        private readonly RecipesBookDbContext _dbContext;
 
-        public ShoppingListService(RecepiesBookDbContext dbContext)
+        public ShoppingListService(RecipesBookDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -28,10 +28,9 @@ namespace RecepiesBook.Services
         public ShoppingList GetShoppingListById(int id)
         {
             var shoppingList = _dbContext.ShoppingLists
-                                    .Include(x => x.IngAmounts)
-                                    .ThenInclude(x => x.Ingredient)
-                                    .Where(sl => sl.Id == id)
-                                    .FirstOrDefault();
+                .Include(x => x.IngAmounts)
+                .ThenInclude(x => x.Ingredient)
+                .FirstOrDefault(sl => sl.Id == id);
 
             return shoppingList;
 
@@ -113,17 +112,17 @@ namespace RecepiesBook.Services
             return true;
         }
 
-        public bool AddIngredientsFromRecepieToSl(int id, int recepieId)
+        public bool AddIngredientsFromRecipeToSl(int id, int recipeId)
         {
             var currentShoppingList = _dbContext.ShoppingLists.SingleOrDefault(x => x.Id == id);
 
-            var recepie = _dbContext.Recepies.Include(x => x.IngAmounts)
-                                            .SingleOrDefault(x => x.Id == recepieId);
+            var recipe = _dbContext.Recipes.Include(x => x.IngAmounts)
+                                            .SingleOrDefault(x => x.Id == recipeId);
 
-            if (currentShoppingList == null || recepie == null)
+            if (currentShoppingList == null || recipe == null)
                 return false;
 
-            foreach (var ing in recepie.IngAmounts)
+            foreach (var ing in recipe.IngAmounts)
             {
                 var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x => x.ShoppingListId == id && x.IngredientId == ing.IngredientId);
                 if (ingAmount != null)
@@ -138,7 +137,7 @@ namespace RecepiesBook.Services
 
         public bool DeleteShoppingList(int id)
         {
-            var shoppingList = _dbContext.ShoppingLists.Where(x => x.Id == id).FirstOrDefault();
+            var shoppingList = _dbContext.ShoppingLists.FirstOrDefault(x => x.Id == id);
 
             if (shoppingList == null)
                 return false;

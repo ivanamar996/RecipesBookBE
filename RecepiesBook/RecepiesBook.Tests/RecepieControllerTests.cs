@@ -4,60 +4,61 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using RecepiesBook.Controllers;
-using RecepiesBook.Models;
-using RecepiesBook.Services;
+using RecipesBook.Models;
+using RecipesBook.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using RecipesBook.Controllers;
 
-namespace RecepiesBook.Tests
+namespace RecipesBook.Tests
 {
     [TestFixture]
-    public class RecepieControllerTests
+    public class RecipeControllerTests
     {
-        private Mock<IRecepieService> _service;
-        private RecepiesController _controller;
-        private Recepie _recepie;
+        private Mock<IRecipeService> _service;
+        private RecipesController _controller;
+        private Recipe _recipe;
 
 
         [SetUp]
         public void SetUp()
         {
-            _service = new Mock<IRecepieService>();
-            _controller = new RecepiesController(_service.Object);
-            _recepie = new Recepie();
+            _service = new Mock<IRecipeService>();
+            _controller = new RecipesController(_service.Object);
+            _recipe = new Recipe();
         }
 
         [Test]
-        public void Get_WhenCalled_ShouldReturnListOfRecepies()
+        public void Get_WhenCalled_ShouldReturnListOfRecipes()
         {
             var result = _controller.Get();
 
-            _service.Verify(s => s.GetAllRecepies(),Times.Once);
+            _service.Verify(s => s.GetAllRecipes(),Times.Once);
             Assert.That(result, Is.TypeOf<OkObjectResult>());
         }
 
         [Test]
-        public void GetRecepieById_IdDoesNotExistsInDb_ShouldReturnBadRequest()
+        public void GetRecipeById_IdDoesNotExistsInDb_ShouldReturnBadRequest()
         {
-            _service.Setup(s => s.GetRecepieById(1)).Returns((Recepie)null);
+            _service.Setup(s => s.GetRecipeById(1)).Returns((Recipe)null);
 
-            var result = _controller.GetRecepieById(1);
+            var result = _controller.GetRecipeById(1);
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
 
         }
 
         [Test]
-        public void GetRecepieById_IdExistsInDb_ShouldReturnOk()
+        public void GetRecipeById_IdExistsInDb_ShouldReturnOk()
         {
-            _recepie.Id = 1;
-            _service.Setup(s => s.GetRecepieById(1)).Returns(_recepie);
+            _recipe.Id = 1;
+            _service.Setup(s => s.GetRecipeById(1)).Returns(_recipe);
 
-            var result = _controller.GetRecepieById(1) as OkObjectResult;
+            var result = _controller.GetRecipeById(1) as OkObjectResult;
 
             Assert.That(result, Is.TypeOf<OkObjectResult>());
-            Assert.That(result.Value, Is.EqualTo(_recepie));
+            Assert.That(result.Value, Is.EqualTo(_recipe));
 
         }
 
@@ -66,7 +67,7 @@ namespace RecepiesBook.Tests
         {
             _controller.ModelState.AddModelError("test", "test");
 
-            var result = _controller.Post(_recepie);
+            var result = _controller.Post(_recipe);
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
 
@@ -75,11 +76,11 @@ namespace RecepiesBook.Tests
         [Test]
         public void Post_ModelStateIsValid_ShouldReturnCreatedAtAction()
         {
-            var result = _controller.Post(_recepie) as CreatedAtActionResult;
+            var result = _controller.Post(_recipe) as CreatedAtActionResult;
 
-            _service.Verify(s => s.CreateNewRecepie(_recepie));
+            _service.Verify(s => s.CreateNewRecipe(_recipe));
             Assert.That(result, Is.TypeOf<CreatedAtActionResult>());
-            Assert.That(result.Value, Is.EqualTo(_recepie));
+            Assert.That(result.Value, Is.EqualTo(_recipe));
         }
 
         [Test]
@@ -87,7 +88,7 @@ namespace RecepiesBook.Tests
         {
             _controller.ModelState.AddModelError("test", "test");
 
-            var result = _controller.Update(1,_recepie);
+            var result = _controller.Update(1,_recipe);
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }
@@ -95,9 +96,9 @@ namespace RecepiesBook.Tests
         [Test]
         public void Update_SuccessfullyUpdated_ShouldReturnNoContent()
         {
-            _service.Setup(s => s.UpdateRecepie(1, _recepie)).Returns(true);
+            _service.Setup(s => s.UpdateRecipe(1, _recipe)).Returns(true);
 
-            var result = _controller.Update(1, _recepie);
+            var result = _controller.Update(1, _recipe);
 
             Assert.That(result, Is.TypeOf<NoContentResult>());
         }
@@ -105,9 +106,9 @@ namespace RecepiesBook.Tests
         [Test]
         public void Update_IdDoesNotExistsInDb_ShouldReturnNoFound()
         {
-            _service.Setup(s => s.UpdateRecepie(1, _recepie)).Returns(false);
+            _service.Setup(s => s.UpdateRecipe(1, _recipe)).Returns(false);
 
-            var result = _controller.Update(1, _recepie);
+            var result = _controller.Update(1, _recipe);
 
             Assert.That(result, Is.TypeOf<NotFoundResult>());
         }
@@ -115,7 +116,7 @@ namespace RecepiesBook.Tests
         [Test]
         public void Delete_SuccessfullyDeleted_ShouldReturnOk()
         {
-            _service.Setup(s => s.DeleteRecepie(1)).Returns(true);
+            _service.Setup(s => s.DeleteRecipe(1)).Returns(true);
 
             var result = _controller.Delete(1);
 
@@ -125,7 +126,7 @@ namespace RecepiesBook.Tests
         [Test]
         public void Delete_IdDoesNotExistsInDb_ShouldReturnNotFound()
         {
-            _service.Setup(s => s.DeleteRecepie(1)).Returns(false);
+            _service.Setup(s => s.DeleteRecipe(1)).Returns(false);
 
             var result = _controller.Delete(1);
 

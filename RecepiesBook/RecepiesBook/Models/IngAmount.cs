@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecepiesBook.Models
+namespace RecipesBook.Models
 {
     public class IngAmount
     {
@@ -14,7 +14,7 @@ namespace RecepiesBook.Models
         public int Amount { get; set; }
         public int? IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
-        public int? RecepieId { get; set; }
+        public int? RecipeId { get; set; }
         public int? ShoppingListId { get; set; }
 
     }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecepiesBook.Models
+namespace RecipesBook.Models
 {
     public class Ingredient
     {

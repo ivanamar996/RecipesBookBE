@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using RecepiesBook.Controllers;
-using RecepiesBook.Models;
-using RecepiesBook.Services;
+using RecipesBook.Models;
+using RecipesBook.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using RecipesBook.Controllers;
 
-namespace RecepiesBook.Tests
+namespace RecipesBook.Tests
 {
     [TestFixture]
     public class ShoppingListsControllerTests
@@ -113,7 +114,7 @@ namespace RecepiesBook.Tests
         }
 
         [Test]
-        public void AddIngredientsFromRecepieToSl_ModelStateIsNotValid_ShouldReturnBadRequest()
+        public void AddIngredientsFromRecipeToSl_ModelStateIsNotValid_ShouldReturnBadRequest()
         {
             _controller.ModelState.AddModelError("test", "test");
 
@@ -123,9 +124,9 @@ namespace RecepiesBook.Tests
         }
 
         [Test]
-        public void AddIngredientsFromRecepieToSl_SuccessfullyUpdated_ShouldReturnNoContent()
+        public void AddIngredientsFromRecipeToSl_SuccessfullyUpdated_ShouldReturnNoContent()
         {
-            _service.Setup(s => s.AddIngredientsFromRecepieToSl(1, 2)).Returns(true);
+            _service.Setup(s => s.AddIngredientsFromRecipeToSl(1, 2)).Returns(true);
 
             var result = _controller.AddIngredientsFromRecepieToSl(1, 2);
 
@@ -133,9 +134,9 @@ namespace RecepiesBook.Tests
         }
 
         [Test]
-        public void AddIngredientsFromRecepieToSl_IdDoesNotExistsInDb_ShouldReturnNoFound()
+        public void AddIngredientsFromRecipeToSl_IdDoesNotExistsInDb_ShouldReturnNoFound()
         {
-            _service.Setup(s => s.AddIngredientsFromRecepieToSl(1, 2)).Returns(false);
+            _service.Setup(s => s.AddIngredientsFromRecipeToSl(1, 2)).Returns(false);
 
             var result = _controller.AddIngredientsFromRecepieToSl(1, 2);
 

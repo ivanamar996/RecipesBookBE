@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RecepiesBook.Models;
+using RecipesBook.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecepiesBook.Data
+namespace RecipesBook.Data
 {
-    public class RecepiesBookDbContext : IdentityDbContext<ApplicationUser>
+    public class RecipesBookDbContext : IdentityDbContext<ApplicationUser>
     {
-        public RecepiesBookDbContext(DbContextOptions<RecepiesBookDbContext> options) : base(options)
+        public RecipesBookDbContext(DbContextOptions<RecipesBookDbContext> options) : base(options)
         {     
         }
 
-        public DbSet<Recepie> Recepies { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<IngAmount> IngAmounts { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }

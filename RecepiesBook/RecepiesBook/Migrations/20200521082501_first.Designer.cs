@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RecepiesBook.Data;
+using RecipesBook.Data;
 
-namespace RecepiesBook.Migrations
+namespace RecipesBook.Migrations
 {
-    [DbContext(typeof(RecepiesBookDbContext))]
-    partial class RecepiesBookDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(RecipesBookDbContext))]
+    [Migration("20200521082501_first")]
+    partial class first
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,7 +152,7 @@ namespace RecepiesBook.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RecepiesBook.Models.ApplicationUser", b =>
+            modelBuilder.Entity("RecipesBook.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -215,7 +217,7 @@ namespace RecepiesBook.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("RecepiesBook.Models.IngAmount", b =>
+            modelBuilder.Entity("RecipesBook.Models.IngAmount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -228,7 +230,7 @@ namespace RecepiesBook.Migrations
                     b.Property<int?>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecepieId")
+                    b.Property<int?>("RecipeId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ShoppingListId")
@@ -238,14 +240,14 @@ namespace RecepiesBook.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.HasIndex("RecepieId");
+                    b.HasIndex("RecipeId");
 
                     b.HasIndex("ShoppingListId");
 
                     b.ToTable("IngAmounts");
                 });
 
-            modelBuilder.Entity("RecepiesBook.Models.Ingredient", b =>
+            modelBuilder.Entity("RecipesBook.Models.Ingredient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,7 +263,7 @@ namespace RecepiesBook.Migrations
                     b.ToTable("Ingredients");
                 });
 
-            modelBuilder.Entity("RecepiesBook.Models.Recepie", b =>
+            modelBuilder.Entity("RecipesBook.Models.Recipe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -282,10 +284,10 @@ namespace RecepiesBook.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recepies");
+                    b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("RecepiesBook.Models.ShoppingList", b =>
+            modelBuilder.Entity("RecipesBook.Models.ShoppingList", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -315,7 +317,7 @@ namespace RecepiesBook.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("RecepiesBook.Models.ApplicationUser", null)
+                    b.HasOne("RecipesBook.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -324,7 +326,7 @@ namespace RecepiesBook.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("RecepiesBook.Models.ApplicationUser", null)
+                    b.HasOne("RecipesBook.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -339,7 +341,7 @@ namespace RecepiesBook.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RecepiesBook.Models.ApplicationUser", null)
+                    b.HasOne("RecipesBook.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -348,25 +350,25 @@ namespace RecepiesBook.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("RecepiesBook.Models.ApplicationUser", null)
+                    b.HasOne("RecipesBook.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RecepiesBook.Models.IngAmount", b =>
+            modelBuilder.Entity("RecipesBook.Models.IngAmount", b =>
                 {
-                    b.HasOne("RecepiesBook.Models.Ingredient", "Ingredient")
+                    b.HasOne("RecipesBook.Models.Ingredient", "Ingredient")
                         .WithMany("IngAmounts")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("RecepiesBook.Models.Recepie", null)
+                    b.HasOne("RecipesBook.Models.Recipe", null)
                         .WithMany("IngAmounts")
-                        .HasForeignKey("RecepieId");
+                        .HasForeignKey("RecipeId");
 
-                    b.HasOne("RecepiesBook.Models.ShoppingList", null)
+                    b.HasOne("RecipesBook.Models.ShoppingList", null)
                         .WithMany("IngAmounts")
                         .HasForeignKey("ShoppingListId");
                 });

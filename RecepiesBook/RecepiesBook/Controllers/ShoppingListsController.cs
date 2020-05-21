@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RecepiesBook.Models;
-using RecepiesBook.Services;
+using RecipesBook.Models;
+using RecipesBook.Services;
 
-namespace RecepiesBook.Controllers
+namespace RecipesBook.Controllers
 {
    // [Authorize]
     [Route("api/[controller]")]
@@ -70,7 +70,7 @@ namespace RecepiesBook.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            bool success = _shoppingListService.AddIngredientsFromRecepieToSl(id, recepieId);
+            bool success = _shoppingListService.AddIngredientsFromRecipeToSl(id, recepieId);
 
             if (success)
                 return NoContent();
