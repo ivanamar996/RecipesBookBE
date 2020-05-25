@@ -29,8 +29,8 @@ namespace RecipesBook.Services
         {
             var shoppingList = _dbContext.ShoppingLists
                 .Include(x => x.IngAmounts)
-                .ThenInclude(x => x.Ingredient)
-                .FirstOrDefault(sl => sl.Id == id);
+                    .ThenInclude(x => x.Ingredient)
+                .FirstOrDefault(x => x.Id == id);
 
             return shoppingList;
 
@@ -41,13 +41,7 @@ namespace RecipesBook.Services
 
             foreach (var ing in newShoppingList.IngAmounts)
             {
-                var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Id == ing.IngredientId);
-
-                if (ingredient == null)
-                {
-                    ingredient = _dbContext.Ingredients.Add(ing.Ingredient).Entity;
-                }
-
+                var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Id == ing.IngredientId) ?? _dbContext.Ingredients.Add(ing.Ingredient).Entity;
                 ing.Ingredient = ingredient;
 
                 _dbContext.IngAmounts.Add(ing);
@@ -69,46 +63,17 @@ namespace RecipesBook.Services
             foreach (var ing in changedShoppingList.IngAmounts)
             {
                 if (ing.IngredientId == null)
-                {
-                    var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.Equals(ing.Ingredient.Name));
-
-                    if (ingredient != null)
-                    {
-                        ing.IngredientId = ingredient.Id;
-
-                    }
-                    else
-                    {
-                        ingredient = _dbContext.Ingredients.Add(ing.Ingredient).Entity;
-                        ing.IngredientId = ingredient.Id;
-                    }
-                    _dbContext.IngAmounts.Add(ing);
-
-                }
+                    CreateNewIngAmount(ing);
                 else
-                {
-                    var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x => x.Id == ing.Id);
-
-                    if (ingAmount != null)
-                    {
-                        ingAmount.Amount = ing.Amount;
-                        ingAmount.IngredientId = ing.IngredientId;
-                    }
-                    else
-                    {
-                        _dbContext.IngAmounts.Add(ing);
-                    }
-                }
+                    UpdateIngAmount(ing);
             }
 
-            var deletedIngAmounts = currentShoppingList.IngAmounts.Where(i => !changedShoppingList.IngAmounts.Any(x => x.Id == i.Id));
+            var deletedIngAmounts = currentShoppingList.IngAmounts.Where(i => changedShoppingList.IngAmounts.All(x => x.Id != i.Id));
             _dbContext.IngAmounts.RemoveRange(deletedIngAmounts);
 
-            currentShoppingList.Name = changedShoppingList.Name;
-            currentShoppingList.Description = changedShoppingList.Description;
+            currentShoppingList.Update(changedShoppingList);
 
             _dbContext.SaveChanges();
-
             return true;
         }
 
@@ -149,6 +114,38 @@ namespace RecipesBook.Services
             _dbContext.SaveChanges();
 
             return true;
+        }
+
+        private void UpdateIngAmount(IngAmount ing)
+        {
+            var ingAmount = _dbContext.IngAmounts.SingleOrDefault(x => x.Id == ing.Id);
+
+            if (ingAmount != null)
+            {
+                ingAmount.Amount = ing.Amount;
+                ingAmount.IngredientId = ing.IngredientId;
+            }
+            else
+            {
+                _dbContext.IngAmounts.Add(ing);
+            }
+        }
+
+        private void CreateNewIngAmount(IngAmount ing)
+        {
+            var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.Equals(ing.Ingredient.Name));
+
+            if (ingredient != null)
+            {
+                ing.IngredientId = ingredient.Id;
+            }
+            else
+            {
+                ingredient = _dbContext.Ingredients.Add(ing.Ingredient).Entity;
+                ing.IngredientId = ingredient.Id;
+            }
+
+            _dbContext.IngAmounts.Add(ing);
         }
     }
 }

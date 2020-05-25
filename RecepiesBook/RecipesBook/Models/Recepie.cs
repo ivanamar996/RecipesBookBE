@@ -17,5 +17,12 @@ namespace RecipesBook.Models
         [Required]
         public string ImagePath { get; set; }
         public ICollection<IngAmount> IngAmounts { get; set; }
+
+        public void UpdateRecipe(Recipe recipe)
+        {
+            Description = recipe.Description;
+            ImagePath = recipe.ImagePath;
+            Name = recipe.Name;
+        }
     }
 }
